@@ -55,7 +55,6 @@ if __name__ == "__main__":
     cheese_x = 150
     cheese_y = 150
 
-
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
