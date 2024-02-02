@@ -8,13 +8,13 @@ from board.tile import Tile
 class Board:
     tiles: List[List[Tile]]
 
-    def __init__(self, x, y, tile_size=50):
+    def __init__(self, tiles: List[List[int]], tile_size=50):
         self.tiles = list()
-        for iy in range(y):
+        for iy in range(len(tiles)):
             self.tiles.append(list())
-            for ix in range(x):
+            for ix in range(len(tiles[iy])):
                 self.tiles[iy].append(
-                    Tile((ix+iy) % 2, Vector2(ix * tile_size, iy * tile_size), (tile_size, tile_size)))
+                    Tile(tiles[iy][ix], Vector2(ix * tile_size, iy * tile_size), Vector2(tile_size, tile_size)))
 
     def draw(self, surface: Surface):
         for y in range(len(self.tiles)):

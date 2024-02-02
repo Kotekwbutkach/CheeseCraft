@@ -9,8 +9,10 @@ class Tile:
     position: Vector2
     size: Vector2
     tile_type_to_color: dict[int, str] = {
-        0: "grey70",
-        1: "grey90"
+        0: "grey90",
+        1: "grey70",
+        2: "grey30",
+        3: "grey10"
     }
 
     def __init__(self, tile_type: int, position: Vector2, size: Vector2):
