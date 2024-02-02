@@ -1,59 +1,44 @@
-from typing import Tuple
-
 import pygame
+from pygame import Vector2
 
-
-def draw_mouse(position: Tuple[int, int]):
-    x, y = position
-    pygame.draw.circle(window, "grey60", [x, y], 25, 0)
-    pygame.draw.circle(window, "grey45", [x - 20, y - 20], 15, 0)
-    pygame.draw.circle(window, "grey45", [x + 20, y - 20], 15, 0)
-    pygame.draw.circle(window, "grey70", [x - 10, y], 5, 0)
-    pygame.draw.circle(window, "grey70", [x + 10, y], 5, 0)
-    pygame.draw.circle(window, "grey30", [x - 10, y], 2, 0)
-    pygame.draw.circle(window, "grey30", [x + 10, y], 2, 0)
-    pygame.draw.circle(window, "grey30", [x, y + 10], 3, 0)
-
-
-def draw_cat(position: Tuple[int, int]):
-    x, y = position
-    pygame.draw.circle(window, "darkorange", [x, y], 25, 0)
-    pygame.draw.polygon(window, "darkorange2", ((x-30, y-30), (x-25, y-5), (x-5, y-25)), 0)
-    pygame.draw.polygon(window, "darkorange2", ((x+30, y-30), (x+25, y-5), (x+5, y-25)), 0)
-    pygame.draw.polygon(window, "darkorange4", ((x-25, y-25), (x-20, y-10), (x-10, y-20)), 0)
-    pygame.draw.polygon(window, "darkorange4", ((x+25, y-25), (x+20, y-10), (x+10, y-20)), 0)
-    pygame.draw.circle(window, "moccasin", [x - 10, y], 5, 0)
-    pygame.draw.circle(window, "moccasin", [x + 10, y], 5, 0)
-    pygame.draw.circle(window, "darkred", [x - 10, y], 2, 0)
-    pygame.draw.circle(window, "darkred", [x + 10, y], 2, 0)
-    pygame.draw.circle(window, "darkorange4", [x, y + 10], 2, 0)
-    pygame.draw.ellipse(window, "darkorange4", [x-3, y + 8, 6, 2], 0)
-
-
-def draw_cheese(position: Tuple[int, int]):
-    x, y = position
-    pygame.draw.polygon(window, "yellow", ((x-20, y-25), (x-30, y-10), (x+30, y-10)), 0)
-    pygame.draw.rect(window, "yellow3", ((x-30, y-10), (60, 30)), 0)
-    pygame.draw.circle(window, "yellow4", [x - 15, y], 5, 0)
-    pygame.draw.circle(window, "yellow4", [x - 23, y+11], 3, 0)
-    pygame.draw.circle(window, "yellow4", [x + 10, y+10], 8, 0)
-    pygame.draw.circle(window, "yellow4", [x + 20, y - 5], 3, 0)
-
+from board.board import Board
+from game_object.game_object_factory import GameObjectFactory
+from game_object.game_object_manager import GameObjectManager
 
 if __name__ == "__main__":
     pygame.init()
 
-    window = pygame.display.set_mode((300, 200))
+    tiles = [
+        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+        [3, 3, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 3],
+        [3, 2, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3],
+        [3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 3],
+        [3, 2, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3],
+        [3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 3],
+        [3, 2, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3],
+        [3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 3],
+        [3, 2, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3],
+        [3, 2, 3, 3, 3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 3],
+        [3, 2, 2, 2, 2, 2, 3, 1, 0, 1, 0, 1, 0, 1, 0, 3],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+    ]
+
+    board = Board(tiles, 50)
+
+    game_manager = GameObjectManager()
+    mouse = GameObjectFactory.create(75, 125, "Mouse")
+    game_manager.add(mouse)
+    cat = GameObjectFactory.create(225, 75, "Cat")
+    game_manager.add(cat)
+    cheese = GameObjectFactory.create(275, 325, "Cheese")
+    game_manager.add(cheese)
+    window = pygame.display.set_mode((800, 600))
     pygame.display.set_caption('CheeseCraft')
 
+    clock = pygame.time.Clock()
     running = True
 
-    mouse_x = 75
-    mouse_y = 75
-    cat_x = 225
-    cat_y = 75
-    cheese_x = 150
-    cheese_y = 150
+    frame = 1
 
     while running:
         for event in pygame.event.get():
@@ -62,8 +47,19 @@ if __name__ == "__main__":
 
         window.fill("grey25")
 
-        draw_mouse((mouse_x, mouse_y))
-        draw_cat((cat_x, cat_y))
-        draw_cheese((cheese_x, cheese_y))
+        frame = (frame + 1) % 1200
+
+        delta = Vector2(0, -1)
+        if frame < 200:
+            delta = Vector2(1, 0)
+        elif frame < 600:
+            delta = Vector2(0, 1)
+        elif frame < 800:
+            delta = Vector2(-1, 0)
+
+        mouse.move(delta)
+        board.draw(window)
+        game_manager.draw(window)
 
         pygame.display.flip()
+        clock.tick(90)
