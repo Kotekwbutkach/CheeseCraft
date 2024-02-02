@@ -1,17 +1,15 @@
 from abc import abstractmethod
 
-from pygame import Surface
-
-from game_object.position import Position
+from pygame import Surface, Vector2
 
 
 class GameObject:
-    position: Position
+    position: Vector2
 
     def __init__(self, x: int, y: int):
-        self.position = Position(x, y)
+        self.position = Vector2(x, y)
 
-    def move(self, dpos: Position):
+    def move(self, dpos: Vector2):
         self.position += dpos
 
     @abstractmethod

@@ -3,14 +3,13 @@ from typing import Dict
 from game_object.object.cat import Cat
 from game_object.object.cheese import Cheese
 from game_object.object.mouse import Mouse
-from game_object.position import Position
 
 
 class GameObjectFactory:
     string_to_type: Dict[str, type] = {
-        "Mouse": type(Mouse(0, 0)),
-        "Cat": type(Cat(0, 0)),
-        "Cheese": type(Cheese(0, 0))
+        "Mouse": Mouse,
+        "Cat": Cat,
+        "Cheese": Cheese,
     }
 
     @staticmethod

@@ -1,13 +1,14 @@
-from typing import Tuple
-
 import pygame
+from pygame import Vector2
 
+from board.board import Board
 from game_object.game_object_factory import GameObjectFactory
 from game_object.game_object_manager import GameObjectManager
-from game_object.position import Position
 
 if __name__ == "__main__":
     pygame.init()
+
+    board = Board(16, 12, 50)
 
     game_manager = GameObjectManager()
     mouse = GameObjectFactory.create(75, 75, "Mouse")
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     game_manager.add(cat)
     cheese = GameObjectFactory.create(150, 150, "Cheese")
     game_manager.add(cheese)
-    window = pygame.display.set_mode((300, 200))
+    window = pygame.display.set_mode((800, 600))
     pygame.display.set_caption('CheeseCraft')
 
     clock = pygame.time.Clock()
@@ -33,15 +34,16 @@ if __name__ == "__main__":
 
         frame = (frame + 1) % 300
 
-        delta = Position(0, -1)
+        delta = Vector2(0, -1)
         if frame < 75:
-            delta = Position(1, 0)
+            delta = Vector2(1, 0)
         elif frame < 150:
-            delta = Position(0, 1)
+            delta = Vector2(0, 1)
         elif frame < 225:
-            delta = Position(-1, 0)
+            delta = Vector2(-1, 0)
 
         mouse.move(delta)
+        board.draw(window)
         game_manager.draw(window)
 
         pygame.display.flip()
